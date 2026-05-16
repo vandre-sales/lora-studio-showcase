@@ -22,8 +22,8 @@ This repository documents the complete architecture of **LoRA Studio** — a Saa
 The core technical innovation is the **LOCKED/UNLOCKED Protocol** — a deterministic method derived from the Flow Matching loss function that encodes brand identity directly into model weights, making brand drift structurally impossible rather than manually policed.
 
 **This case study is the architecture behind the concepts described in my LinkedIn articles:**
-- [How I Built an AI System That Turns Brand Guidelines Into 10,000 On-Brand Assets](https://www.linkedin.com/in/vandresales/) (Business perspective)
-- [The Mathematics of Brand Memory: How Loss Functions Enforce Visual Identity](https://www.linkedin.com/in/vandresales/) (Technical perspective)
+- [Como Criei um Sistema de IA que Transforma Diretrizes de Marca em 10.000 Assets](https://www.linkedin.com/pulse/como-criei-um-sistema-de-ia-que-transforma-o-em-10000-vandr%C3%A9-h-sales-phowf) (Business perspective — PT-BR, EN version publishing 2026-05-20)
+- The Mathematics of Brand Memory: How Loss Functions Enforce Visual Identity (Technical perspective — publishing soon)
 
 ---
 

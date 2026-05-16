@@ -73,28 +73,59 @@ graph TD
 
 ## 3.3. Bounded Contexts (Domain-Driven Design)
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                       LORA STUDIO PLATFORM                        │
-│                                                                    │
-│  ┌────────────────┐  ┌─────────────────────┐  ┌───────────────┐  │
-│  │ BRAND MGMT     │  │ DATASET ENGINEERING  │  │ TRAINING      │  │
-│  │ brand-service   │  │ ingest-service       │  │ config-service│  │
-│  │ persona-service │  │ caption-service      │  │ training-svc  │  │
-│  │                 │  │ package-service      │  │               │  │
-│  └────────────────┘  └─────────────────────┘  └───────────────┘  │
-│                                                                    │
-│  ┌─────────────────────┐  ┌──────────────────┐                   │
-│  │ QUALITY ASSURANCE   │  │ DEPLOYMENT        │                   │
-│  │ evaluation-service   │  │ deploy-service    │                   │
-│  │ review-service       │  │                   │                   │
-│  └─────────────────────┘  └──────────────────┘                   │
-│                                                                    │
-│  ┌──────────────────────────────────────────────────────────┐    │
-│  │ SHARED: api-gateway | auth | storage | notification |     │    │
-│  │         project-service                                    │    │
-│  └──────────────────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────────────────┘
+```mermaid
+block-beta
+    columns 3
+
+    block:BRAND["🏢 BRAND MANAGEMENT"]:1
+        brand["brand-service"]
+        persona["persona-service"]
+    end
+
+    block:DATASET["📦 DATASET ENGINEERING"]:1
+        ingest["ingest-service"]
+        caption["caption-service"]
+        package["package-service"]
+    end
+
+    block:TRAINING["🧠 TRAINING ORCHESTRATION"]:1
+        config["config-service (SSoT)"]
+        training["training-service"]
+    end
+
+    block:QA["✅ QUALITY ASSURANCE"]:1
+        evaluation["evaluation-service"]
+        review["review-service"]
+    end
+
+    block:DEPLOY["🚀 DEPLOYMENT"]:1
+        deploy["deploy-service"]
+    end
+
+    block:SHARED["⚙️ SHARED INFRASTRUCTURE"]:1
+        gateway["api-gateway"]
+        auth["auth-service"]
+        storage["storage-service"]
+        notify["notification-service"]
+        project["project-service"]
+    end
+
+    brand --> config
+    persona --> config
+    ingest --> caption
+    caption --> package
+    package --> training
+    training --> evaluation
+    evaluation --> review
+    review --> deploy
+    review --> caption
+
+    style BRAND fill:#4ecdc4,color:#000
+    style DATASET fill:#ffd93d,color:#000
+    style TRAINING fill:#ffd93d,color:#000
+    style QA fill:#6bcb77,color:#000
+    style DEPLOY fill:#6bcb77,color:#000
+    style SHARED fill:#ddd,color:#000
 ```
 
 **Communication rule:** Services in DIFFERENT domains communicate EXCLUSIVELY via REST API. Zero direct database access across domain boundaries.
