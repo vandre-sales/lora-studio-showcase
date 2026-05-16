@@ -1,0 +1,72 @@
+openapi: "3.0.3"
+info:
+  title: caption-service API
+  version: "1.0.0"
+  description: "Auto-captioning, inline editing, and LOCKED violation detection for LoRA training datasets."
+paths:
+  /api/v1/captioning-jobs:
+    post:
+      summary: Dispatch auto-captioning job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [dataset_id, lora_config_id]
+              properties:
+                dataset_id: { type: string, format: uuid }
+                lora_config_id: { type: string, format: uuid }
+      responses:
+        "201":
+          description: Job created
+  /api/v1/captions:
+    get:
+      summary: List captions by dataset
+      parameters:
+        - name: dataset_id
+          in: query
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: List of captions with violations
+  /api/v1/captions/{id}:
+    patch:
+      summary: Edit caption inline (DS only)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text: { type: string }
+      responses:
+        "200":
+          description: Updated caption with re-validated violations
+  /api/v1/captions/validate:
+    post:
+      summary: Batch scan for LOCKED violations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataset_id: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Violation report
+  /api/v1/captions/validate-single:
+    post:
+      summary: Real-time single caption validation (<200ms)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text: { type: string }
+                lora_config_id: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Violations list with positions and suggestions

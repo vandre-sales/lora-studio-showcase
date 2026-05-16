@@ -1,0 +1,143 @@
+openapi: "3.0.3"
+info:
+  title: config-service API
+  version: "1.0.0"
+  description: "LoRA Registry — Single Source of Truth for all LoRA configurations, trigger words, hyperparameters, and locked terms."
+
+paths:
+  /api/v1/lora-configs:
+    post:
+      summary: Create new LoRA config
+      description: Auto-generates trigger word and calculates hyperparameters based on type and dataset size.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [project_id, type, locked_attributes, class_word]
+              properties:
+                project_id: { type: string, format: uuid }
+                type: { type: string, enum: [persona, identity-logo, style, color-palette, object] }
+                locked_attributes: { type: array, items: { type: string } }
+                class_word: { type: string, example: "woman" }
+      responses:
+        "201":
+          description: Config created with auto-generated trigger and hyperparameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoraConfig"
+
+    get:
+      summary: List configs by project
+      parameters:
+        - name: project_id
+          in: query
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: List of LoRA configs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  configs:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LoraConfig"
+
+  /api/v1/lora-configs/{id}:
+    get:
+      summary: Get full config
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Full LoRA configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoraConfig"
+
+    patch:
+      summary: DS override hyperparameters
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rank: { type: integer }
+                alpha: { type: integer }
+                steps: { type: integer }
+                lr: { type: number }
+                optimizer: { type: string }
+      responses:
+        "200":
+          description: Updated config
+
+  /api/v1/lora-configs/{id}/validate-trigger:
+    post:
+      summary: Validate trigger tokenization
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Tokenization result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trigger: { type: string }
+                  t5_tokens: { type: integer }
+                  clip_tokens: { type: integer }
+                  status: { type: string, enum: [OK, FRAGMENTED] }
+
+  /api/v1/lora-registry:
+    get:
+      summary: Global registry of production LoRAs
+      parameters:
+        - name: org_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema: { type: string, default: PRODUCTION }
+      responses:
+        "200":
+          description: Registry of trained LoRAs
+
+components:
+  schemas:
+    LoraConfig:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        trigger_word: { type: string, maxLength: 9 }
+        class_word: { type: string }
+        lora_type: { type: string }
+        locked_terms: { type: array, items: { type: string } }
+        rank: { type: integer, default: 32 }
+        alpha: { type: integer, default: 32 }
+        steps: { type: integer }
+        learning_rate: { type: number, default: 0.0001 }
+        optimizer: { type: string, default: adamw8bit }
+        inference_strength: { type: number }
+        t5_token_count: { type: integer }
+        clip_token_count: { type: integer }
+        tokenization_status: { type: string }

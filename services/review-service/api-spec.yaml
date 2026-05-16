@@ -1,0 +1,64 @@
+openapi: "3.0.3"
+info:
+  title: review-service API
+  version: "1.0.0"
+  description: "Approval flow with creative-to-technical feedback translation."
+paths:
+  /api/v1/review-cycles:
+    post:
+      summary: Create review cycle (service-to-service)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [evaluation_id]
+              properties:
+                evaluation_id: { type: string, format: uuid }
+      responses:
+        "201":
+          description: Review cycle created
+  /api/v1/review-cycles/{id}:
+    get:
+      summary: Cycle details with images and votes
+      responses:
+        "200":
+          description: Full review cycle data
+  /api/v1/review-cycles/{id}/vote:
+    post:
+      summary: Creator votes on image
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [image_id, vote]
+              properties:
+                image_id: { type: string, format: uuid }
+                vote: { type: string, enum: [APPROVE, REJECT] }
+                comment: { type: string }
+                pin_x: { type: number, minimum: 0, maximum: 1 }
+                pin_y: { type: number, minimum: 0, maximum: 1 }
+      responses:
+        "201":
+          description: Vote recorded
+  /api/v1/review-cycles/{id}/finalize:
+    post:
+      summary: Finalize review (Creator)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision: { type: string, enum: [APPROVE, REJECT, PARTIAL] }
+      responses:
+        "200":
+          description: Review finalized
+  /api/v1/review-cycles/{id}/feedback-tasks:
+    get:
+      summary: Technical tasks derived from creative feedback (DS)
+      responses:
+        "200":
+          description: Array of feedback tasks with technical suggestions

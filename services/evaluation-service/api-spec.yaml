@@ -1,0 +1,39 @@
+openapi: "3.0.3"
+info:
+  title: evaluation-service API
+  version: "1.0.0"
+  description: "Automated QA metrics and stress test image generation."
+paths:
+  /api/v1/evaluations:
+    post:
+      summary: Create evaluation (auto-generates stress test images)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [training_job_id]
+              properties:
+                training_job_id: { type: string, format: uuid }
+                test_prompts: { type: array, items: { type: string } }
+      responses:
+        "201":
+          description: Evaluation started
+  /api/v1/evaluations/{id}:
+    get:
+      summary: Evaluation status and results
+      responses:
+        "200":
+          description: Status, images, scores
+  /api/v1/evaluations/{id}/images:
+    get:
+      summary: Generated image gallery
+      responses:
+        "200":
+          description: Array of images with prompts and scores
+  /api/v1/evaluations/{id}/scores:
+    get:
+      summary: Aggregated metrics (DS only)
+      responses:
+        "200":
+          description: trigger_activation, locked_fidelity, unlocked_diversity, negative_control, overall

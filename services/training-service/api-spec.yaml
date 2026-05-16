@@ -1,0 +1,59 @@
+openapi: "3.0.3"
+info:
+  title: training-service API
+  version: "1.0.0"
+  description: "Training job dispatch, monitoring, and checkpoint management."
+paths:
+  /api/v1/training-jobs:
+    post:
+      summary: Dispatch training job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [package_id, lora_config_id]
+              properties:
+                package_id: { type: string, format: uuid }
+                lora_config_id: { type: string, format: uuid }
+                provider: { type: string, enum: [replicate, sagemaker, vertex, local], default: replicate }
+      responses:
+        "201":
+          description: Training job queued
+  /api/v1/training-jobs/{id}:
+    get:
+      summary: Job status with current step and loss
+      responses:
+        "200":
+          description: Job details
+  /api/v1/training-jobs/{id}/loss-curve:
+    get:
+      summary: Loss history datapoints
+      responses:
+        "200":
+          description: Array of {step, loss} datapoints
+  /api/v1/training-jobs/{id}/checkpoints:
+    get:
+      summary: List saved checkpoints
+      responses:
+        "200":
+          description: Checkpoints with step, loss, sample URLs
+  /api/v1/training-jobs/{id}/select-checkpoint:
+    post:
+      summary: Select optimal checkpoint (DS)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkpoint_id: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Checkpoint selected
+  /api/v1/training-jobs/{id}/cancel:
+    post:
+      summary: Cancel training job
+      responses:
+        "200":
+          description: Job cancelled
