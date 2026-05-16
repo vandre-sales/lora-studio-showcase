@@ -74,43 +74,38 @@ graph TD
 ## 3.3. Bounded Contexts (Domain-Driven Design)
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4ecdc4', 'background': 'transparent', 'mainBkg': 'transparent'}}}%%
 graph TD
-    subgraph PLATFORM ["LORA STUDIO PLATFORM"]
-        direction TB
+    subgraph BRAND ["🏢 Brand Management"]
+        brand-svc["brand-service"]
+        persona-svc["persona-service"]
+    end
 
-        subgraph BRAND ["🏢 Brand Management"]
-            brand-svc["brand-service"]
-            persona-svc["persona-service"]
-        end
+    subgraph DATASET ["📦 Dataset Engineering"]
+        ingest-svc["ingest-service"]
+        caption-svc["caption-service"]
+        package-svc["package-service"]
+    end
 
-        subgraph DATASET ["📦 Dataset Engineering"]
-            ingest-svc["ingest-service"]
-            caption-svc["caption-service"]
-            package-svc["package-service"]
-        end
+    subgraph TRAINING ["🧠 Training Orchestration"]
+        config-svc["config-service (SSoT)"]
+        training-svc["training-service"]
+    end
 
-        subgraph TRAINING ["🧠 Training Orchestration"]
-            config-svc["config-service (SSoT)"]
-            training-svc["training-service"]
-        end
+    subgraph QA ["✅ Quality Assurance"]
+        eval-svc["evaluation-service"]
+        review-svc["review-service"]
+    end
 
-        subgraph QA ["✅ Quality Assurance"]
-            eval-svc["evaluation-service"]
-            review-svc["review-service"]
-        end
+    subgraph DEPLOY ["🚀 Deployment"]
+        deploy-svc["deploy-service"]
+    end
 
-        subgraph DEPLOY ["🚀 Deployment"]
-            deploy-svc["deploy-service"]
-        end
-
-        subgraph SHARED ["⚙️ Shared Infrastructure"]
-            gw["api-gateway"]
-            auth["auth-service"]
-            storage["storage-service"]
-            notify["notification-service"]
-            project["project-service"]
-        end
+    subgraph SHARED ["⚙️ Shared Infrastructure"]
+        gw["api-gateway"]
+        auth["auth-service"]
+        storage["storage-service"]
+        notify["notification-service"]
+        project["project-service"]
     end
 
     brand-svc --> config-svc
@@ -122,19 +117,11 @@ graph TD
     eval-svc --> review-svc
     review-svc --> deploy-svc
     review-svc -.->|Feedback| caption-svc
-
-    style PLATFORM fill:#f8f9fa,stroke:#343a40,stroke-width:2px,color:#000
-    style BRAND fill:#4ecdc4,stroke:#2ba8a0,color:#000
-    style DATASET fill:#ffd93d,stroke:#ccae00,color:#000
-    style TRAINING fill:#ffe066,stroke:#ccb233,color:#000
-    style QA fill:#6bcb77,stroke:#4a9e55,color:#000
-    style DEPLOY fill:#74c0fc,stroke:#4a8fcc,color:#000
-    style SHARED fill:#e9ecef,stroke:#adb5bd,color:#000
 ```
 
 **Communication rule:** Services in DIFFERENT domains communicate EXCLUSIVELY via REST API. Zero direct database access across domain boundaries.
 
-## 3.4. Pipeline Backbone — 10 Automations + 3 Human Gates
+## 3.4. Pipeline Backbone — 10 Automations + 3 Human-in-the-Loop Gates
 
 The backbone is the orchestrated flow of REST calls between services, triggered by events:
 
@@ -151,7 +138,7 @@ The backbone is the orchestrated flow of REST calls between services, triggered 
 | 9 | Auto-Poll | training-service | `training.started` | Status + loss + samples |
 | 10 | Auto-QA | evaluation-service | `training.completed` | Score report |
 
-**3 Human Gates:**
+**3 Human-in-the-Loop Gates:**
 
 | Gate | Who Decides | What Happens | Mandatory? |
 |---|---|---|---|

@@ -13,6 +13,6 @@
 ### Architecture Highlights
 - 15 microservices across 5 DDD bounded contexts
 - LOCKED/UNLOCKED protocol with mathematical derivation from Flow Matching loss function
-- 3 human gates in the pipeline (Caption Review, Hyperparameter Override, Visual Approval)
+- 3 Human-in-the-Loop gates in the pipeline (Caption Review, Hyperparameter Override, Visual Approval)
 - Cloud-agnostic design: AWS canonical + GCP/Azure equivalents mapped
 - NVIDIA ecosystem integration: H100/A100, NIM, NGC, Inception program

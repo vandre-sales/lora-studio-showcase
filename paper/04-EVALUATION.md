@@ -24,7 +24,7 @@ For each evaluation, the system auto-generates 6 test prompts:
 5. `A {class} in a park` — **negative control** (NO trigger)
 6. `{trigger} {class} {campaign_brief_excerpt}` — real campaign context
 
-## 4.3. Human Gates — The Non-Negotiable Layer
+## 4.3. Human-in-the-Loop — The Non-Negotiable Layer
 
 Automated metrics provide the first quality gate, but **human judgment remains the ultimate arbiter**:
 

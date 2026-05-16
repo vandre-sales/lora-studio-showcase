@@ -85,7 +85,7 @@ graph TD
     SVC_R -->|Feedback Loop| SVC_C
 ```
 
-**15 microservices** organized into 5 bounded contexts (DDD), communicating exclusively via REST API. Each service owns its database — zero shared state. The pipeline includes **3 human gates** where automated processing pauses for expert review.
+**15 microservices** organized into 5 bounded contexts (DDD), communicating exclusively via REST API. Each service owns its database — zero shared state. The pipeline includes **3 Human-in-the-Loop checkpoints** where automated processing pauses for expert review.
 
 → [**Deep dive: Full Architecture**](paper/03-ARCHITECTURE.md)
 
@@ -163,7 +163,7 @@ This case study is based on a real production system. Evidence of implementation
 | [**paper/01-PROBLEM.md**](paper/01-PROBLEM.md) | The brand consistency gap, substrate challenge, market data | 5 min |
 | [**paper/02-METHODOLOGY.md**](paper/02-METHODOLOGY.md) | Loss function math, LOCKED/UNLOCKED protocol, captioning pipeline | 10 min |
 | [**paper/03-ARCHITECTURE.md**](paper/03-ARCHITECTURE.md) | 15 microservices, DDD, REST contracts, cloud infrastructure | 15 min |
-| [**paper/04-EVALUATION.md**](paper/04-EVALUATION.md) | 4 automated metrics, human gates, business ROI | 5 min |
+| [**paper/04-EVALUATION.md**](paper/04-EVALUATION.md) | 4 automated metrics, Human-in-the-Loop, business ROI | 5 min |
 | [**paper/05-RELATED-WORK.md**](paper/05-RELATED-WORK.md) | Stability AI, Replicate, NVIDIA ecosystem, Brazilian GenAI landscape | 8 min |
 | [**services/**](services/) | OpenAPI specs, SQL schemas, READMEs for 5 core services | 20 min |
 | [**examples/**](examples/) | UX flows for Creator onboarding, DS training monitor, review gallery | 10 min |
