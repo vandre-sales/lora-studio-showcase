@@ -75,56 +75,57 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph BRAND ["🏢 Brand Management"]
-        brand-svc["brand-service<br/><i>Brand Vault + Style Guide</i>"]
-        persona-svc["persona-service<br/><i>Persona Builder + Interview</i>"]
-    end
+    subgraph PLATFORM ["LORA STUDIO PLATFORM"]
+        direction TB
 
-    subgraph CONFIG_LAYER ["🧠 Training Orchestration"]
-        config-svc["config-service<br/><i>SSoT: Trigger + Hyperparams</i>"]
-    end
+        subgraph BRAND ["🏢 Brand Management"]
+            brand-svc["brand-service"]
+            persona-svc["persona-service"]
+        end
 
-    subgraph DATASET ["📦 Dataset Engineering"]
-        ingest-svc["ingest-service<br/><i>Upload + Resize Lanczos</i>"]
-        caption-svc["caption-service<br/><i>Auto-Caption + Violations</i>"]
-        package-svc["package-service<br/><i>ZIP + Verify Pairing</i>"]
-    end
+        subgraph DATASET ["📦 Dataset Engineering"]
+            ingest-svc["ingest-service"]
+            caption-svc["caption-service"]
+            package-svc["package-service"]
+        end
 
-    subgraph TRAIN ["⚡ Training"]
-        training-svc["training-service<br/><i>Dispatch + Loss + Checkpoints</i>"]
-    end
+        subgraph TRAINING ["🧠 Training Orchestration"]
+            config-svc["config-service (SSoT)"]
+            training-svc["training-service"]
+        end
 
-    subgraph QA ["✅ Quality Assurance"]
-        eval-svc["evaluation-service<br/><i>Stress Test + 4 Metrics</i>"]
-        review-svc["review-service<br/><i>Approval + Feedback Loop</i>"]
-    end
+        subgraph QA ["✅ Quality Assurance"]
+            eval-svc["evaluation-service"]
+            review-svc["review-service"]
+        end
 
-    subgraph DEPLOY ["🚀 Deployment"]
-        deploy-svc["deploy-service<br/><i>Registry + Catalog + Download</i>"]
-    end
+        subgraph DEPLOY ["🚀 Deployment"]
+            deploy-svc["deploy-service"]
+        end
 
-    subgraph SHARED ["⚙️ Shared Infrastructure"]
-        gw["api-gateway"] --- auth["auth-service"]
-        storage["storage-service"] --- notify["notification-service"]
-        project["project-service"]
+        subgraph SHARED ["⚙️ Shared Infrastructure"]
+            gw["api-gateway"]
+            auth["auth-service"]
+            storage["storage-service"]
+            notify["notification-service"]
+            project["project-service"]
+        end
     end
 
     brand-svc --> config-svc
     persona-svc --> config-svc
-    config-svc --> caption-svc
-
     ingest-svc --> caption-svc
     caption-svc --> package-svc
     package-svc --> training-svc
     training-svc --> eval-svc
     eval-svc --> review-svc
     review-svc --> deploy-svc
-    review-svc -.->|Feedback Loop| caption-svc
+    review-svc -.->|Feedback| caption-svc
 
+    style PLATFORM fill:#f8f9fa,stroke:#343a40,stroke-width:2px,color:#000
     style BRAND fill:#4ecdc4,stroke:#2ba8a0,color:#000
-    style CONFIG_LAYER fill:#ffe066,stroke:#ccb233,color:#000
     style DATASET fill:#ffd93d,stroke:#ccae00,color:#000
-    style TRAIN fill:#ffa94d,stroke:#cc8533,color:#000
+    style TRAINING fill:#ffe066,stroke:#ccb233,color:#000
     style QA fill:#6bcb77,stroke:#4a9e55,color:#000
     style DEPLOY fill:#74c0fc,stroke:#4a8fcc,color:#000
     style SHARED fill:#e9ecef,stroke:#adb5bd,color:#000
