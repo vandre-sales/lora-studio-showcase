@@ -175,7 +175,7 @@ This case study is based on a real production system. Evidence of implementation
 
 **Vandré Sales** — AI/ML Architect specializing in multi-agent systems and generative AI for brand production. AWS CTO Fellowship alumni. Computer Engineering (UFG) + Physics (Unicamp).
 
-- [LinkedIn](https://www.linkedin.com/in/vandresales/) · [GitHub](https://github.com/vandre-sales)
+- <a href="https://www.linkedin.com/in/vandresales/" target="_blank">LinkedIn</a> · <a href="https://github.com/vandre-sales/vandre-sales" target="_blank">GitHub</a>
 
 ---
 
