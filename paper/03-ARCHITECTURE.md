@@ -74,58 +74,60 @@ graph TD
 ## 3.3. Bounded Contexts (Domain-Driven Design)
 
 ```mermaid
-block-beta
-    columns 3
-
-    block:BRAND["🏢 BRAND MANAGEMENT"]:1
-        brand["brand-service"]
-        persona["persona-service"]
+graph TD
+    subgraph BRAND ["🏢 Brand Management"]
+        brand-svc["brand-service<br/><i>Brand Vault + Style Guide</i>"]
+        persona-svc["persona-service<br/><i>Persona Builder + Interview</i>"]
     end
 
-    block:DATASET["📦 DATASET ENGINEERING"]:1
-        ingest["ingest-service"]
-        caption["caption-service"]
-        package["package-service"]
+    subgraph CONFIG_LAYER ["🧠 Training Orchestration"]
+        config-svc["config-service<br/><i>SSoT: Trigger + Hyperparams</i>"]
     end
 
-    block:TRAINING["🧠 TRAINING ORCHESTRATION"]:1
-        config["config-service (SSoT)"]
-        training["training-service"]
+    subgraph DATASET ["📦 Dataset Engineering"]
+        ingest-svc["ingest-service<br/><i>Upload + Resize Lanczos</i>"]
+        caption-svc["caption-service<br/><i>Auto-Caption + Violations</i>"]
+        package-svc["package-service<br/><i>ZIP + Verify Pairing</i>"]
     end
 
-    block:QA["✅ QUALITY ASSURANCE"]:1
-        evaluation["evaluation-service"]
-        review["review-service"]
+    subgraph TRAIN ["⚡ Training"]
+        training-svc["training-service<br/><i>Dispatch + Loss + Checkpoints</i>"]
     end
 
-    block:DEPLOY["🚀 DEPLOYMENT"]:1
-        deploy["deploy-service"]
+    subgraph QA ["✅ Quality Assurance"]
+        eval-svc["evaluation-service<br/><i>Stress Test + 4 Metrics</i>"]
+        review-svc["review-service<br/><i>Approval + Feedback Loop</i>"]
     end
 
-    block:SHARED["⚙️ SHARED INFRASTRUCTURE"]:1
-        gateway["api-gateway"]
-        auth["auth-service"]
-        storage["storage-service"]
-        notify["notification-service"]
+    subgraph DEPLOY ["🚀 Deployment"]
+        deploy-svc["deploy-service<br/><i>Registry + Catalog + Download</i>"]
+    end
+
+    subgraph SHARED ["⚙️ Shared Infrastructure"]
+        gw["api-gateway"] --- auth["auth-service"]
+        storage["storage-service"] --- notify["notification-service"]
         project["project-service"]
     end
 
-    brand --> config
-    persona --> config
-    ingest --> caption
-    caption --> package
-    package --> training
-    training --> evaluation
-    evaluation --> review
-    review --> deploy
-    review --> caption
+    brand-svc --> config-svc
+    persona-svc --> config-svc
+    config-svc --> caption-svc
 
-    style BRAND fill:#4ecdc4,color:#000
-    style DATASET fill:#ffd93d,color:#000
-    style TRAINING fill:#ffd93d,color:#000
-    style QA fill:#6bcb77,color:#000
-    style DEPLOY fill:#6bcb77,color:#000
-    style SHARED fill:#ddd,color:#000
+    ingest-svc --> caption-svc
+    caption-svc --> package-svc
+    package-svc --> training-svc
+    training-svc --> eval-svc
+    eval-svc --> review-svc
+    review-svc --> deploy-svc
+    review-svc -.->|Feedback Loop| caption-svc
+
+    style BRAND fill:#4ecdc4,stroke:#2ba8a0,color:#000
+    style CONFIG_LAYER fill:#ffe066,stroke:#ccb233,color:#000
+    style DATASET fill:#ffd93d,stroke:#ccae00,color:#000
+    style TRAIN fill:#ffa94d,stroke:#cc8533,color:#000
+    style QA fill:#6bcb77,stroke:#4a9e55,color:#000
+    style DEPLOY fill:#74c0fc,stroke:#4a8fcc,color:#000
+    style SHARED fill:#e9ecef,stroke:#adb5bd,color:#000
 ```
 
 **Communication rule:** Services in DIFFERENT domains communicate EXCLUSIVELY via REST API. Zero direct database access across domain boundaries.
