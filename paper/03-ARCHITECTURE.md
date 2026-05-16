@@ -74,6 +74,7 @@ graph TD
 ## 3.3. Bounded Contexts (Domain-Driven Design)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4ecdc4', 'background': 'transparent', 'mainBkg': 'transparent'}}}%%
 graph TD
     subgraph PLATFORM ["LORA STUDIO PLATFORM"]
         direction TB
