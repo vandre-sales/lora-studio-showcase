@@ -2,11 +2,16 @@
 
 This document walks through the Data Scientist's experience reviewing captions, monitoring training, and selecting the best checkpoint.
 
+> **⚠️ Disclaimer:** The screenshots shown below are non-functional mockups. Original production interface screenshots have been replaced with mockups for client governance and privacy reasons.
+
 ## Dashboard (Landing)
 - List of active projects with status cards
 - Each card: Name | Type | Status | Images | Violations | Action button
 
 ## Caption Review (Inline Editor)
+
+![DS Monitor: Caption Review](../assets/ds-training-monitor/01_screen.png)
+
 **Split view:**
 - **Left:** Image (1024×1024 with zoom)
 - **Right:** Caption editor with:
@@ -37,6 +42,9 @@ Pre-filled with intelligent defaults. DS can adjust:
 **Expert mode toggle** reveals: batch size, gradient accumulation, noise scheduler, dtype.
 
 ## Training Monitor (Real-Time)
+
+![DS Monitor: Training Real-Time](../assets/ds-training-monitor/02_screen.png)
+
 **Loss curve chart** (WebSocket-updated):
 - X-axis: Steps (0–3200)
 - Y-axis: Loss (0.0–1.0)
